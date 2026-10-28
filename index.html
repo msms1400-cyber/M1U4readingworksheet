@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The World of Plastic - Interactive Worksheet</title>
+<style>
+  /* =========================================================
+     GLOBAL STYLES & RESET
+     ========================================================= */
+  * {
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  }
+  
+  body {
+    background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+    margin: 0;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #2c3e50;
+  }
+
+  /* =========================================================
+     MAIN CARD CONTAINER
+     ========================================================= */
+  .app-container {
+    background: #ffffff;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .header {
+    background: linear-gradient(to right, #1e3c72, #2a5298);
+    color: #ffffff;
+    padding: 25px 20px;
+    text-align: center;
+  }
+
+  .header h1 {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .header p {
+    margin: 8px 0 0 0;
+    font-size: 0.95rem;
+    color: #d1d8e0;
+  }
+
+  .content-area {
+    padding: 30px 25px;
+  }
+
+  /* =========================================================
+     SCREEN 1: LOGIN / WELCOME
+     ========================================================= */
+  .welcome-box {
+    text-align: center;
+  }
+  
+  .welcome-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+  }
+
+  .input-group {
+    margin: 25px 0;
+    text-align: left;
+  }
+
+  .input-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #34495e;
+  }
+
+  .name-input {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1rem;
+    border: 2px solid #bdc3c7;
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  .name-input:focus {
+    border-color: #2980b9;
+  }
+
+  .error-msg {
+    color: #e74c3c;
+    font-size: 0.9rem;
+    margin-top: 8px;
+    display: none;
+    font-weight: 600;
+  }
+
+  /* =========================================================
+     BUTTONS
+     ========================================================= */
+  .btn-primary {
+    display: block;
+    width: 100%;
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 16px;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s, transform 0.1s;
+    box-shadow: 0 4px 6px rgba(39, 174, 96, 0.2);
+  }
+
+  .btn-primary:active {
+    transform: translateY(2px);
+    box-shadow: none;
+  }
+
+  .btn-primary:disabled {
+    background: #95a5a6;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  /* =========================================================
+     SCREEN 2: QUIZ
+     ========================================================= */
+  .progress-text {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .question-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 25px;
+    line-height: 1.4;
+  }
+
+  .option-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: #f8f9fa;
+    border: 2px solid #e2e8f0;
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #34495e;
+    font-weight: 500;
+  }
+
+  .option-btn:hover {
+    background: #eef2f5;
+    border-color: #cbd5e1;
+  }
+
+  .option-btn.correct {
+    background: #e6f4ea;
+    border-color: #34a853;
+    color: #137333;
+  }
+
+  .option-btn.wrong {
+    background: #fce8e6;
+    border-color: #ea4335;
+    color: #a50e0e;
+  }
+
+  .feedback-box {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin: 20px 0;
+    min-height: 25px;
+  }
+
+  /* =========================================================
+     SCREEN 3: CERTIFICATE (SCREENSHOT READY)
+     ========================================================= */
+  .certificate-wrapper {
+    background: linear-gradient(135deg, #fff9c4 0%, #f1c40f 100%);
+    padding: 6px;
+    border-radius: 16px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+  }
+
+  .certificate-inner {
+    background: #ffffff;
+    border: 2px dashed #d35400;
+    border-radius: 12px;
+    padding: 30px 20px;
+    text-align: center;
+    position: relative;
+  }
+
+  .cert-ribbon {
+    width: 60px;
+    height: 60px;
+    background: #d35400;
+    border-radius: 50%;
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 1.5rem;
+    border: 4px solid #fff;
+  }
+
+  .cert-title {
+    font-size: 1.8rem;
+    color: #2c3e50;
+    font-weight: 800;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+  }
+
+  .cert-subtitle {
+    font-size: 1rem;
+    color: #e67e22;
+    font-weight: 600;
+    margin-bottom: 25px;
+  }
+
+  .cert-name-label {
+    font-size: 1rem;
+    color: #7f8c8d;
+    margin-bottom: 5px;
+  }
+
+  .cert-student-name {
+    font-size: 1.8rem;
+    color: #2980b9;
+    font-weight: bold;
+    border-bottom: 2px solid #bdc3c7;
+    display: inline-block;
+    padding: 0 20px 5px 20px;
+    margin-bottom: 25px;
+    min-width: 250px;
+  }
+
+  .cert-score-box {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 25px;
+    display: inline-block;
+    min-width: 200px;
+  }
+
+  .score-label {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  .score-value {
+    font-size: 3rem;
+    color: #27ae60;
+    font-weight: 900;
+    line-height: 1;
+    margin-top: 5px;
+  }
+
+  .cert-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    color: #34495e;
+    font-weight: 600;
+    border-top: 1px solid #ecf0f1;
+    padding-top: 15px;
+    text-align: left;
+  }
+  
+  .cert-footer div:last-child {
+    text-align: right;
+  }
+
+  .camera-hint {
+    text-align: center;
+    font-size: 0.95rem;
+    color: #34495e;
+    margin-top: 20px;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Utility classes */
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="app-container">
+  <div class="header">
+    <h1>The World of Plastic</h1>
+    <p>Unit 4 / The Art of Advertising</p>
+  </div>
+
+  <!-- SCREEN 1: LOGIN -->
+  <div class="content-area" id="screen-login">
+    <div class="welcome-box">
+      <div class="welcome-icon">💳</div>
+      <h2 style="margin:0 0 10px 0; color:#2c3e50;">Reading Comprehension</h2>
+      <p style="color:#7f8c8d; margin-top:0;">Please enter your name to begin the test.</p>
+    </div>
+    
+    <div class="input-group">
+      <label for="studentNameInput">Student Name:</label>
+      <input type="text" id="studentNameInput" class="name-input" placeholder="Type your full name..." autocomplete="off">
+      <div id="nameError" class="error-msg">⚠️ You must enter your name to start!</div>
+    </div>
+
+    <button class="btn-primary" id="btn-start" onclick="startApp()">Start Quiz</button>
+  </div>
+
+  <!-- SCREEN 2: QUIZ -->
+  <div class="content-area hidden" id="screen-quiz">
+    <div class="progress-text" id="progress-indicator">Question 1 of 10</div>
+    <div class="question-text" id="q-text">Question text goes here?</div>
+    
+    <div id="options-wrapper">
+      <!-- Options injected by JS -->
+    </div>
+    
+    <div class="feedback-box" id="feedback-display"></div>
+    <button class="btn-primary hidden" id="btn-next" onclick="nextQuestion()" style="background:#2980b9;">Next Question ➔</button>
+  </div>
+
+  <!-- SCREEN 3: RESULT / CERTIFICATE -->
+  <div class="content-area hidden" id="screen-result">
+    <div class="certificate-wrapper">
+      <div class="certificate-inner" id="certificate-capture">
+        <div class="cert-ribbon">★</div>
+        <div class="cert-title">Certificate of Achievement</div>
+        <div class="cert-subtitle">Topic: The World of Plastic</div>
+        
+        <div class="cert-name-label">Awarded to</div>
+        <div class="cert-student-name" id="final-student-name">Student Name</div>
+        <br>
+        
+        <div class="cert-score-box">
+          <div class="score-label">Final Score</div>
+          <div class="score-value" id="final-score-val">10/10</div>
+        </div>
+        
+        <div class="cert-footer">
+          <div>
+            <span style="color:#7f8c8d; font-size:0.8rem; display:block;">Teacher</span>
+            Mohammed Al-Faifi
+          </div>
+          <div>
+            <span style="color:#7f8c8d; font-size:0.8rem; display:block;">Subject</span>
+            English
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="camera-hint">
+      📸 Take a screenshot of this certificate and send it to your teacher.
+    </div>
+  </div>
+</div>
+
+<script>
+  // =========================================================
+  // QUIZ DATA (From Worksheet)
+  // =========================================================
+  var quizData = [
+    {
+      question: "1. How long have credit cards been available?",
+      options: ["A. Since the 1980s.", "B. Since about 1950.", "C. Since the 1920s."],
+      correctIndex: 1 // B
+    },
+    {
+      question: "2. Why was Frank McNamara embarrassed?",
+      options: ["A. He had left his wallet in his other suit.", "B. He had lost his credit card.", "C. He had arrived late for dinner."],
+      correctIndex: 0 // A
+    },
+    {
+      question: "3. What did Frank think was a silly restriction?",
+      options: ["A. Paying for meals in restaurants.", "B. Using a card in different shops.", "C. Spending only the cash people carried."],
+      correctIndex: 2 // C
+    },
+    {
+      question: "4. Which phrase meant using a credit card?",
+      options: ["A. 'Charging it'", "B. 'Paying in cash'", "C. 'First Supper'"],
+      correctIndex: 0 // A
+    },
+    {
+      question: "5. What showed that the Diner's Club Card was popular?",
+      options: ["A. Only one restaurant accepted it.", "B. Thousands of businesses accepted it by 1952.", "C. Only Frank and his friends used it."],
+      correctIndex: 1 // B
+    },
+    {
+      question: "6. What did the card represent to people who had one?",
+      options: ["A. A free meal.", "B. A restaurant membership only.", "C. A status symbol: a sign of high social standing."],
+      correctIndex: 2 // C
+    },
+    {
+      question: "7. How did the use of credit cards expand?",
+      options: ["A. Cards were used only in New York restaurants.", "B. Cards spread abroad and to more types of businesses.", "C. Cards were accepted only by local banks."],
+      correctIndex: 1 // B
+    },
+    // Timeline section formatted as Questions
+    {
+      question: "8. [Timeline 1949] What happened in this year?",
+      options: ["A. Paid with a card", "B. Forgot his wallet", "C. Thousands of businesses accepted the card"],
+      correctIndex: 1 // B (1949)
+    },
+    {
+      question: "9. [Timeline 1950] What happened in this year?",
+      options: ["A. Paid with a card", "B. Forgot his wallet", "C. Thousands of businesses accepted the card"],
+      correctIndex: 0 // A (1950)
+    },
+    {
+      question: "10. [Timeline 1952] What happened in this year?",
+      options: ["A. Paid with a card", "B. Forgot his wallet", "C. Thousands of businesses accepted the card"],
+      correctIndex: 2 // C (1952)
+    }
+  ];
+
+  // =========================================================
+  // APP STATE VARIABLES
+  // =========================================================
+  var currentQIndex = 0;
+  var userScore = 0;
+  var studentName = "";
+  var questionAnswered = false;
+
+  // =========================================================
+  // FUNCTIONS
+  // =========================================================
+
+  // Function to start the app, validates name first
+  function startApp() {
+    var nameInput = document.getElementById("studentNameInput").value;
+    var errorMsg = document.getElementById("nameError");
+
+    // Remove leading/trailing spaces
+    studentName = nameInput.trim();
+
+    if (studentName === "") {
+      // Show error, don't proceed
+      errorMsg.style.display = "block";
+      document.getElementById("studentNameInput").focus();
+    } else {
+      // Hide error, save name, move to quiz
+      errorMsg.style.display = "none";
+      document.getElementById("screen-login").classList.add("hidden");
+      document.getElementById("screen-quiz").classList.remove("hidden");
+      renderQuestion();
+    }
+  }
+
+  // Allow pressing 'Enter' on input to start
+  document.getElementById("studentNameInput").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      startApp();
+    }
+  });
+
+  // Function to render the current question
+  function renderQuestion() {
+    questionAnswered = false;
+    document.getElementById("feedback-display").innerHTML = "";
+    document.getElementById("btn-next").classList.add("hidden");
+    
+    var qData = quizData[currentQIndex];
+    
+    // Update Progress
+    var currentDisplayNum = currentQIndex + 1;
+    document.getElementById("progress-indicator").innerText = "Question " + currentDisplayNum + " of " + quizData.length;
+    
+    // Set Question Text
+    document.getElementById("q-text").innerText = qData.question;
+    
+    // Clear and build options
+    var optionsContainer = document.getElementById("options-wrapper");
+    optionsContainer.innerHTML = ""; 
+
+    for (var i = 0; i < qData.options.length; i++) {
+      var btn = document.createElement("button");
+      btn.className = "option-btn";
+      btn.innerText = qData.options[i];
+      
+      // Use closure to lock in the correct index for the event listener
+      (function(selectedIndex) {
+        btn.onclick = function() {
+          evaluateAnswer(selectedIndex, this);
+        };
+      })(i);
+      
+      optionsContainer.appendChild(btn);
+    }
+  }
+
+  // Function to check answer
+  function evaluateAnswer(selectedIndex, btnElement) {
+    if (questionAnswered) return; // Prevent multiple clicks
+    questionAnswered = true;
+
+    var correctIndex = quizData[currentQIndex].correctIndex;
+    var allOptions = document.getElementById("options-wrapper").getElementsByClassName("option-btn");
+    var feedbackElement = document.getElementById("feedback-display");
+
+    if (selectedIndex === correctIndex) {
+      // Correct
+      btnElement.classList.add("correct");
+      feedbackElement.innerHTML = "✅ Excellent!";
+      feedbackElement.style.color = "#27ae60";
+      userScore++;
+    } else {
+      // Wrong
+      btnElement.classList.add("wrong");
+      allOptions[correctIndex].classList.add("correct"); // Highlight correct one
+      feedbackElement.innerHTML = "❌ Incorrect. See the right answer.";
+      feedbackElement.style.color = "#e74c3c";
+    }
+
+    // Disable all option buttons
+    for (var j = 0; j < allOptions.length; j++) {
+      allOptions[j].style.pointerEvents = "none";
+    }
+
+    // Show Next button
+    var nextBtn = document.getElementById("btn-next");
+    nextBtn.classList.remove("hidden");
+    
+    if (currentQIndex === quizData.length - 1) {
+      nextBtn.innerText = "Finish & Get Certificate 🎓";
+      nextBtn.style.background = "#27ae60";
+    } else {
+      nextBtn.innerText = "Next Question ➔";
+    }
+  }
+
+  // Function to go to next question or end screen
+  function nextQuestion() {
+    currentQIndex++;
+    if (currentQIndex < quizData.length) {
+      renderQuestion();
+    } else {
+      showFinalCertificate();
+    }
+  }
+
+  // Function to display the certificate
+  function showFinalCertificate() {
+    document.getElementById("screen-quiz").classList.add("hidden");
+    document.getElementById("screen-result").classList.remove("hidden");
+    
+    // Inject data into certificate
+    document.getElementById("final-student-name").innerText = studentName;
+    document.getElementById("final-score-val").innerText = userScore + " / " + quizData.length;
+  }
+
+</script>
+</body>
+</html>
